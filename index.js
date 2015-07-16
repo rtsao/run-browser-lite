@@ -49,67 +49,8 @@ function createHandler(filename, reports, phantom) {
           err = err || new Error('No files found matching ' + inspect(filename));
           return handleError(err, res);
         }
-        files = files.map(normalizePath);
-        files.unshift(path.join(__dirname, './lib/override-log.js'));
 
-        if (phantom) {
-          files.unshift(path.join(__dirname, './lib/phantom-function-bind-shim.js'));
-        }
-
-        var resolveRoots = [
-          process.cwd(),
-          process.cwd() + '/node_modules',
-          path.resolve(__dirname, '../node_modules'),
-          path.resolve(__dirname, 'node_modules')
-        ];
-
-        var loaders = [
-          {
-            test: /\.js[x]?$/,
-            loaders: ['babel-loader'],
-            exclude: /node_modules/
-          },
-          {
-            test: /\.css$/,
-            loader: ExtractTextPlugin.extract(
-              'style-loader',
-              'css-loader?modules&localIdentName=[hash:base64]'
-            ),
-            exclude: /node_modules/
-          }
-        ];
-
-        if (reports) {
-          loaders.push({
-            test: /\.js[x]?$/,
-            loader: 'transform?browserify-istanbul'
-          });
-        }
-
-        webpack({
-          plugins: [
-            new ExtractTextPlugin('output.css'),
-          ],
-          entry: files,
-          output: {
-            filename: 'bundle.js'
-          },
-          resolve: {
-            root: resolveRoots,
-          },
-          node: {
-            fs: 'empty'
-          },
-          module: {
-            loaders: loaders
-          }
-        }, function(err, stats) {
-          var json = stats.toJson({errorDetails: true});
-          json.errors.forEach(function(error) {
-            console.log(error);
-          });
-          fs.readFile(process.cwd() + '/bundle.js', 'utf8', onBundleSrc);
-        });
+        fs.readFile(filename, 'utf8', onBundleSrc);
 
         function onBundleSrc(err, src) {
           if (sent) return;
