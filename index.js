@@ -2,13 +2,9 @@
 
 var http = require('http');
 var fs = require('fs');
-var inspect = require('util').inspect;
 var path = require('path');
-var webpack = require('webpack');
-var glob = require('glob');
 var JSONStream = require('jsonstream2');
 var istanbul = require('babel-istanbul');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var runPhantom = require('./lib/run-phantom.js')
 var html = fs.readFileSync(__dirname + '/lib/test-page.html', 'utf8');
 
@@ -44,23 +40,11 @@ function createHandler(filename, reports, phantom) {
     if ('/tests-bundle.js' === req.url) {
       var sent = false;
       res.setHeader('Content-Type', 'application/javascript');
-      return glob(filename, function (err, files) {
-        if (err || files.length === 0) {
-          err = err || new Error('No files found matching ' + inspect(filename));
-          return handleError(err, res);
-        }
 
-        fs.readFile(filename, 'utf8', onBundleSrc);
-
-        function onBundleSrc(err, src) {
-          if (sent) return;
-          sent = true;
-          return err ? handleError(err, res) : res.end(src);
-        }
-
-        function normalizePath(p) {
-          return path.resolve(p);
-        }
+      return fs.readFile(filename, 'utf8', function onBundleSrc(err, src) {
+        if (sent) return;
+        sent = true;
+        return err ? handleError(err, res) : res.end(src);
       });
     }
     if ('/results' === req.url && req.method === 'POST') {
