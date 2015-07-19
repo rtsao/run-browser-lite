@@ -13,8 +13,8 @@ module.exports.runPhantom = runPhantom;
 module.exports.createHandler = createHandler;
 module.exports.handles = handles;
 
-function createServer(filename, reports, phantom) {
-  var handler = createHandler(filename, reports, phantom);
+function createServer(filename, reports, phantom, filesystem) {
+  var handler = createHandler(filename, reports, phantom, filesystem);
   return http.createServer(handler);
 }
 
@@ -25,7 +25,7 @@ function handleError(err, res) {
   if (err) console.error(err.stack || err.message || err);
 }
 
-function createHandler(filename, reports, phantom) {
+function createHandler(filename, reports, phantom, filesystem) {
 
   if (typeof reports === 'boolean' && reports) reports = [ 'text' ];
   else if (typeof reports === 'string') reports = [ reports ];
@@ -41,7 +41,7 @@ function createHandler(filename, reports, phantom) {
       var sent = false;
       res.setHeader('Content-Type', 'application/javascript');
 
-      return fs.readFile(filename, 'utf8', function onBundleSrc(err, src) {
+      return filesystem.readFile(filename, 'utf8', function onBundleSrc(err, src) {
         if (sent) return;
         sent = true;
         return err ? handleError(err, res) : res.end(src);

@@ -7,16 +7,17 @@ var parseArgs = require('minimist');
 var fmt = require('util').format;
 
 var runbrowser = require('../index.js');
+var runner = require('../lib/runner.js');
 
 var args = parseArgs(process.argv.slice(2));
 
 var filename = args._[0];
-var port = Number(args.p || args.port) || 3000;
+var port = Number(args.p || args.port);
 var help = args.help || args.h || args._.length === 0;
 var phantom = args.b || args.phantom || args.phantomjs;
 var report = args.p || args.report || args.istanbul;
 var debug = args.d || args.debug;
-var timeout = args.t || args.timeout || Infinity;
+var timeout = args.t || args.timeout;
 
 if (help) {
   var helpText = [
@@ -38,22 +39,10 @@ if (help) {
   process.exit(process.argv.length === 3 ? 0 : 1);
 }
 
-var server = runbrowser(filename, report, phantom);
-server.listen(port);
-
-if (!phantom) {
-  console.log('Open a browser and navigate to "http://localhost:' + port + '"');
-} else {
-  var proc = runbrowser.runPhantom('http://localhost:' + port + '/');
-
-  proc.stdout.pipe(process.stdout);
-  proc.stderr.pipe(process.stderr);
-
-  if (timeout < Infinity) {
-    setTimeout(function() {
-      console.log(fmt('Timeout of %dms exceeded', timeout));
-      proc.kill();
-      server.close();
-    }, timeout);
-  }
-}
+runner({
+  filename: filename,
+  phantom: phantom,
+  port: port,
+  report: report,
+  timeout: timeout
+});
