@@ -1,18 +1,17 @@
-# run-browser
+# run-browser-lite
 
-The simplest way to run testling type tests in the browser
+run-browser without browserify.
 
-[![Dependency Status](https://img.shields.io/gemnasium/ForbesLindesay/run-browser.svg)](https://gemnasium.com/ForbesLindesay/run-browser)
-[![NPM version](https://img.shields.io/npm/v/run-browser.svg)](http://badge.fury.io/js/run-browser)
+Bundle and instrument tests seperately (with browserify or webpack), then use run-browser-lite to run tests.
 
 ## Installation
 
-    npm install run-browser -g
+    npm install run-browser-lite -g
 
 
 ## Usage
 
-    run-browser <file> <options>
+    run-browser-lite <file> <options>
 
     Options:
       -p --port <number> The port number to run the server on (default: 3000)
@@ -21,14 +20,14 @@ The simplest way to run testling type tests in the browser
       -t --timeout       Global timeout in milliseconds for tests to finish. (default: Infinity)
 
     Example:
-      run-browser test-file.js --port 3030 --report text --report html --report=cobertura
+      run-browser-lite test-file.js --port 3030 --report text --report html --report=cobertura
 
 ## API Usage
 
 Basic usage:
 
 ```js
-var runBrowser = require('run-browser');
+var runBrowser = require('run-browser-lite');
 
 var server = runBrowser('tests/test.js');
 server.listen(3000);
@@ -37,7 +36,7 @@ server.listen(3000);
 Advanced Usage:
 
 ```js
-var runBrowser = require('run-browser');
+var runBrowser = require('run-browser-lite');
 
 var handler = runBrowser.createHandler('tests/test.js');
 var server = http.createServer(function (req, res) {

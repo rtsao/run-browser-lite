@@ -1,9 +1,9 @@
 {
-  "name": "run-browser",
-  "version": "2.0.2",
-  "description": "The simplest way to run testling type tests in the browser",
+  "name": "run-browser-lite",
+  "version": "1.0.0",
+  "description": "run-browser without browserify",
   "bin": "./bin/cli.js",
-  "keywords": [],
+  "keywords": ["run-browser"],
   "dependencies": {
     "babel-istanbul": "^0.2.10",
     "function-bind": "^1.0.2",
@@ -24,8 +24,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/ForbesLindesay/run-browser.git"
+    "url": "https://github.com/rtsao/run-browser-lite.git"
   },
-  "author": "ForbesLindesay",
+  "author": "rtsao",
   "license": "MIT"
 }
