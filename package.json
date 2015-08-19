@@ -5,7 +5,7 @@
   "bin": "./bin/cli.js",
   "keywords": ["run-browser"],
   "dependencies": {
-    "babel-istanbul": "^0.2.10",
+    "babel-istanbul": "^0.3.17",
     "function-bind": "^1.0.2",
     "global": "^4.3.0",
     "jsonstream2": "^1.1.0",
